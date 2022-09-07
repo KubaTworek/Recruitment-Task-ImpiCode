@@ -18,57 +18,31 @@ public class Slonie {
         }
         for (int i = 0; i<n; i++)
         {
-            actual.add(scanner.nextInt());
+            actual.add(scanner.nextInt()-1);
+            expected.add(null);
         }
         for (int i = 0; i<n; i++)
         {
-            expected.add(scanner.nextInt());
+            expected.set(scanner.nextInt()-1, actual.get(i));
         }
+
         boolean[] isRightPlace = new boolean[actual.size()];
         Arrays.fill(isRightPlace, false);
-        for(int i = 0; i<n; ++i){
+        for(int i = 0; i<n; i++){
             if(!isRightPlace[i]){
-                int minWeightLoop = 999999;
-                int loopScore = 0;
-                int currentIndex = i;
-                int steps = 0;
-                for(;;)
-                {
+                int minWeightLoop = 999999, loopScore = 0, currentIndex = i, steps = 0;
+
+                do {
                     minWeightLoop = Math.min(minWeightLoop, weights.get(currentIndex));
                     loopScore += weights.get(currentIndex);
                     currentIndex = expected.get(currentIndex);
                     isRightPlace[currentIndex] = true;
                     steps++;
-                    if((currentIndex==i)) break;
-                }
+                } while(currentIndex!=i);
+
                 score += Math.min(loopScore+(steps-2)*minWeightLoop, loopScore+minWeightLoop+(steps+1)*minWeight);
             }
-            System.out.println(score);
         }
-
-
-/*
-
-        long wynik = 0;
-        for (int pocz = 0; pocz<N; ++pocz)
-            if (!vis[pocz])
-            {
-                int minc = INF; // minimalna waga w cyklu
-                long suma = 0; // suma wag w cyklu
-                int cur = pocz;
-                int dl = 0; // dlugosc cyklu
-                for (;;)
-                {
-                    minc = Math.min(minc, wagi[cur]);
-                    suma += wagi[cur];
-                    cur = perm[cur];
-                    vis[cur] = true;
-                    ++dl;
-                    if (cur==pocz)
-                        break;
-                }
-                wynik += Math.min(suma+(dl-2)*(long)minc, suma+minc+(dl+1)*(long)minw);
-            }
-        System.out.println(wynik);*/
+        System.out.println(score);
     }
 }
